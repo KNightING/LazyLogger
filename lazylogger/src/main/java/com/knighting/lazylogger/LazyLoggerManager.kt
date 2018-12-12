@@ -15,12 +15,24 @@ class LazyLoggerManager {
 
     companion object {
         @JvmStatic
-       internal val instance = LazyLoggerManager()
+        internal val instance = LazyLoggerManager()
 
         @JvmStatic
         fun registerFile(vararg files: LazyLogFile) {
             files.forEach {
-                instance.logFiles.add(it)
+                val filePath = if (File(it.path).isDirectory) "${it.path}/${it.name}" else it.path
+                val maxLevel = if (it.maxLevel < it.minLevel) it.minLevel else it.maxLevel
+
+                instance.logFiles.add(
+                    LazyLogFile(
+                        it.name,
+                        filePath,
+                        it.minLevel,
+                        maxLevel,
+                        it.dateFormat,
+                        it.format
+                    )
+                )
             }
         }
 
