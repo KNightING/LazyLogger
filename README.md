@@ -17,3 +17,8 @@ Simply Android Logger
   implementation 'com.github.KNightING:LazyLogger:1.0.2'
 }
 </code></pre>
+
+</br>
+</br>
+
+[HOW TO USE](https://github.com/KNightING/LazyLogger/wiki)
