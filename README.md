@@ -14,6 +14,6 @@ Simply Android Logger
 ### Step 2. Add the dependency
 <pre><code>dependencies {
   ...
-  implementation 'com.github.KNightING:LazyLogger:1.0.1'
+  implementation 'com.github.KNightING:LazyLogger:1.0.2'
 }
 </code></pre>
