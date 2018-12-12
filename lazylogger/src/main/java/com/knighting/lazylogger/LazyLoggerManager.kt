@@ -15,7 +15,7 @@ class LazyLoggerManager {
 
     companion object {
         @JvmStatic
-        val instance = LazyLoggerManager()
+       internal val instance = LazyLoggerManager()
 
         @JvmStatic
         fun registerFile(vararg files: LazyLogFile) {
@@ -31,9 +31,15 @@ class LazyLoggerManager {
             }
         }
 
-        var logcatTagFormat = "${LazyLogFormat.TAG} [${LazyLogFormat.METHOD}] [${LazyLogFormat.LINE}]"
+        @JvmStatic
+        fun setLagcatTagTemplate(template: String) {
+            instance.logcatTagTemplate = template
+        }
 
-        var logcatContentFormat = "[${LazyLogFormat.THREAD_NAME}] ${LazyLogFormat.MSG}"
+        @JvmStatic
+        fun setLogcatMsgTemplate(template: String) {
+            instance.logcatMsgTemplate = template
+        }
     }
 
     private val thread = HandlerThread("lazyLoggerThread")
@@ -44,6 +50,10 @@ class LazyLoggerManager {
         thread.start()
         handler = Handler(thread.looper)
     }
+
+    private var logcatTagTemplate = "${LazyLogFormat.TAG} [${LazyLogFormat.METHOD}] [${LazyLogFormat.LINE}]"
+
+    private var logcatMsgTemplate = "[${LazyLogFormat.THREAD_NAME}] ${LazyLogFormat.MSG}"
 
     private val logFiles = mutableListOf<LazyLogFile>()
 
@@ -71,8 +81,8 @@ class LazyLoggerManager {
     ) {
         val date = Date()
         val threadName = Thread.currentThread().name ?: ""
-        val catTag = logcatTagFormat.format(level, tag, msg, threadName, trace, date)
-        val catMsg = logcatContentFormat.format(level, tag, msg, threadName, trace, date)
+        val catTag = logcatTagTemplate.format(level, tag, msg, threadName, trace, date)
+        val catMsg = logcatMsgTemplate.format(level, tag, msg, threadName, trace, date)
         when (level) {
             LazyLog.Level.DEBUG -> Log.d(catTag, catMsg)
             LazyLog.Level.INFO -> Log.i(catTag, catMsg)
